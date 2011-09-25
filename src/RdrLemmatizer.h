@@ -125,7 +125,4 @@ public:
 	void LoadBinary(const char *acFileName);
 	void SaveBinary(ostream &os) const;
 	void LoadBinary(istream &is);
-
-
-
 };
