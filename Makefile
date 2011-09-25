@@ -21,5 +21,5 @@ testExecutable: $(OBJECTS)
 
 clean:
 	rm $(SRCDIR)/*.o
-	rm $(LIBNAME)
-	rm $(EXECNAME)
+	rm $(BINDIR)/$(LIBNAME)
+	rm $(BINDIR)/$(EXECNAME)
