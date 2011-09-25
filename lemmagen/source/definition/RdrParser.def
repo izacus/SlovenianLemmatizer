@@ -1,0 +1,245 @@
+/******************************************************************************
+This file is part of the lemmagen library. It gives support for lemmatization.
+Copyright (C) 2006-2007 Matjaz Jursic <matjaz@gmail.com>
+
+The lemmagen library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+******************************************************************************/
+
+//"compile" with options bison++ -d -o <.cpp>  -h <.h> <this file>
+
+//-- C declarations -----------------------------------------------------------
+%header{ 
+	#include "../header/RdrTree.h"
+	
+	struct yy_token_detail
+	{ int *piLine, *piColm, *piLeng;
+	  byte **pacText;
+	};
+		
+%}
+%{
+%}
+
+//-- Bison declarations  ------------------------------------------------------
+%name Parser
+%define CLASS RdrParser
+
+%define LEX yylex_parser
+%define LEX_BODY =0
+%define ERROR yyerror_parser
+%define ERROR_BODY =0
+
+%define ENUM_TOKEN yytoken
+%define NULL_TOKEN EOFNULL
+
+%define LTYPE yy_token_detail
+%define LLOC yylloc
+
+%define OUTPUT_START {sprintf(msgBuffer, 
+%define OUTPUT_END ); (*yyout) << msgBuffer;}
+
+%define MEMBERS \
+	public: \
+	protected: \
+		YY_Parser_LTYPE YY_Parser_LLOC; \
+		ostream *yyout; \
+		bool bEOF;  \
+		char msgBuffer[1000]; \
+		RdrTree *rtTop; \
+	private:
+		
+%define CONSTRUCTOR_CODE \
+		bEOF = false; \
+		//yydebug = true;
+
+%define DEBUG 0
+
+%union yy_parser_val {
+	int iVal;
+	byte *acVal;
+	RdrRule *rrVal;
+	RdrTree *rtVal;
+	RdrTree::deqrt *deqVal;
+}
+
+
+
+//-- token & type declaration -------------------------------------------------
+%token RULE_START RULE_END
+%token EXC_START EXC_END
+%token LBRAC RBRAC TRANSF
+%token ID IF THEN EXC ENTWRD
+%token ERROR 
+
+%token <iVal> INT
+%token <acVal> STRING
+
+%type <iVal> int, exc
+%type <acVal> string, id, if
+
+%type <rrVal> thenrule then 
+%type <rtVal> file rdr rule
+%type <rtVal> proplist propert
+
+%type <deqVal> rdrlist except
+
+%start file
+
+%%
+//-- Grammar rules ------------------------------------------------------------
+
+string	: STRING					{	$$ = yylval.acVal; }
+		| LBRAC STRING RBRAC		{	$$ = yylval.acVal; }
+		;
+int		: INT						{	$$ = yylval.iVal; }
+		| LBRAC INT RBRAC			{	$$ = yylval.iVal; }
+		;
+		
+thenrule: STRING TRANSF STRING		{	int iEqLen = Str::eqPrefixLen((const char*) $1, (const char*) $3);
+										$$ = new RdrRule(strlen((const char*) $1)-iEqLen, Str::copy(&$3[iEqLen]));
+										delete[] $1;
+										delete[] $3;
+									}
+		;
+id		: ID string					{	$$ = $2; }
+		;
+if		: IF string					{	$$ = $2; }
+		;
+then	: THEN thenrule				{	$$ = $2; }
+		| THEN LBRAC thenrule RBRAC	{	$$ = $3; }
+		;
+exc		: EXC int					{	$$ = $2; }
+		;
+		
+proplist:							{	$$ = new RdrTree(); 
+									}
+		| proplist id				{	//check if this field isn't filed already
+										$$ = $1;
+										if ($$->acId == NULL) $$->acId = $2;
+										else {
+											YY_Parser_ERROR("property 'name' was already set");
+											delete $$;
+											YYERROR;
+										};
+									}
+		| proplist if				{	//check if this field isn't filed already
+										$$ = $1;
+										if ($$->acEnding == NULL) $$->SetEnding($2);
+										else {
+											YY_Parser_ERROR("property 'if' was already set");
+											delete $$;
+											YYERROR;
+										};
+									}
+		| proplist then				{	//check if this field isn't filed already
+										$$ = $1;
+										if ($$->rrRule == NULL) $$->rrRule = $2;
+										else {
+											YY_Parser_ERROR("property 'then' was already set");
+											delete $$;
+											YYERROR;	
+										};	
+									}
+		| proplist exc				{	/*nothing to do, ignore number of exceptions*/
+										$$ = $1;
+									}							
+		| proplist ENTWRD			{	/*save flag entireword */
+										$$ = $1;
+										$$->bEntireWord = true;
+									}									
+
+		;
+			
+propert	: proplist					{	$$ = $1;
+									}
+		| LBRAC proplist RBRAC		{	$$ = $2;
+									}
+		| error						{	//error recovery (signalize error)
+										$$ = NULL;
+									}
+		;
+		
+rule	: RULE_START propert 
+		  RULE_END 					{	//check if we got regular RdrTree and that 
+										//all requierd fields are filed
+										yyerrok;
+										$$ = $2;
+										if ($$==NULL) break;
+										
+										if ($$->acEnding == NULL || $$->rrRule == NULL) {
+											if ($$->acEnding == NULL)
+												YY_Parser_ERROR("property 'if' is mandatory");
+											if ($$->rrRule == NULL)
+												YY_Parser_ERROR("property 'then' is mandatory");
+												
+											delete $$; 
+											$$ = NULL;
+											YYERROR;
+											break;
+										}
+									}
+		;		
+		
+rdr		: rule except		        {	//check if we got regular RdrTree
+										yyerrok;
+										$$ = $1;
+										
+										if ($$==NULL) {
+											if ($2!=NULL) delete $2;
+											break;
+										}
+										
+										if ($2==NULL) {
+											$$->deqSubNode = NULL;
+											break;
+										}
+											
+										//create exception table if exceptions exist
+										$$->deqSubNode = $2;
+									}
+		;	
+
+except	:							{	//no exceptions
+										$$ = NULL;
+									}
+		| EXC_START rdrlist 
+          EXC_END					{	$$ = $2;
+									}
+		;					
+										
+rdrlist	:							{	//no exceptions
+										$$ = NULL;
+									}
+		| rdrlist rdr				{	//create exception list if it doesn't exist
+										if($1 == NULL) $$ = new RdrTree::deqrt();
+										else $$ = $1;
+										
+										//add new rdr to list 
+										if ($2!=NULL) $$->push_back($2);
+									}
+		| error                     {   YY_Parser_ERROR("error parsing list of rdr rules!"); }
+		;
+
+file	: rdr						{	//return top rule
+										rtTop = $1;
+										bEOF = true;
+									}
+	    | error                     {   bEOF = true;
+	                                }
+		;
+
+%%
+//-- Additional C code  -------------------------------------------------------
+

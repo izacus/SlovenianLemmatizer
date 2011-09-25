@@ -1,0 +1,164 @@
+Lexicon files converted into latin-1 (iso-8859-1) encoding. After conversion all
+letters are lowercased.
+
+WARNING!
+
+Lexicons presented here should not be used for training real lemmatizers.
+Conversion from unicode to ascii-latin1 involves replacing of some unicode
+letters with latin-1 letters that are not correct representations of the
+originals. 
+
+Conversion tables for all letters for each lexicon are presented below. 
+Replacements are made in such a way that upper-lower case corespondance
+between letters is preserved after conversion (e.g. if 'a' is converted
+to 'b' than also 'A' must be converted to 'B' and vice versa).
+
+wfl-m-en.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+
+wfl-m-fr.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+
+wfl-m-ge.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+
+wfl-m-it.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+
+wfl-m-sp.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+
+wfl-me-bg.tbl
+CONVERSION TABLE:
+  '?' [x0430, 1072] -> 'a' [x00E0, 224]
+  '?' [x0410, 1040] -> 'A' [x00C0, 192]
+  '?' [x0431, 1073] -> 'á' [x00E1, 225]
+  '?' [x0411, 1041] -> 'Á' [x00C1, 193]
+  '?' [x0432, 1074] -> 'â' [x00E2, 226]
+  '?' [x0412, 1042] -> 'Â' [x00C2, 194]
+  '?' [x0433, 1075] -> 'a' [x00E3, 227]
+  '?' [x0413, 1043] -> 'A' [x00C3, 195]
+  '?' [x0434, 1076] -> 'ä' [x00E4, 228]
+  '?' [x0414, 1044] -> 'Ä' [x00C4, 196]
+  '?' [x0435, 1077] -> 'a' [x00E5, 229]
+  '?' [x0415, 1045] -> 'A' [x00C5, 197]
+  '?' [x0436, 1078] -> 'a' [x00E6, 230]
+  '?' [x0416, 1046] -> 'A' [x00C6, 198]
+  '?' [x0437, 1079] -> 'ç' [x00E7, 231]
+  '?' [x0417, 1047] -> 'Ç' [x00C7, 199]
+  '?' [x0438, 1080] -> 'e' [x00E8, 232]
+  '?' [x0418, 1048] -> 'E' [x00C8, 200]
+  '?' [x0439, 1081] -> 'é' [x00E9, 233]
+  '?' [x0419, 1049] -> 'É' [x00C9, 201]
+  '?' [x043A, 1082] -> 'e' [x00EA, 234]
+  '?' [x041A, 1050] -> 'E' [x00CA, 202]
+  '?' [x043B, 1083] -> 'ë' [x00EB, 235]
+  '?' [x041B, 1051] -> 'Ë' [x00CB, 203]
+  '?' [x043C, 1084] -> 'i' [x00EC, 236]
+  '?' [x041C, 1052] -> 'I' [x00CC, 204]
+  '?' [x043D, 1085] -> 'í' [x00ED, 237]
+  '?' [x041D, 1053] -> 'Í' [x00CD, 205]
+  '?' [x043E, 1086] -> 'î' [x00EE, 238]
+  '?' [x041E, 1054] -> 'Î' [x00CE, 206]
+  '?' [x043F, 1087] -> 'i' [x00EF, 239]
+  '?' [x041F, 1055] -> 'I' [x00CF, 207]
+  '?' [x0440, 1088] -> '?' [x00F0, 240]
+  '?' [x0420, 1056] -> '?' [x00D0, 208]
+  '?' [x0441, 1089] -> 'n' [x00F1, 241]
+  '?' [x0421, 1057] -> 'N' [x00D1, 209]
+  '?' [x0442, 1090] -> 'o' [x00F2, 242]
+  '?' [x0422, 1058] -> 'O' [x00D2, 210]
+  '?' [x0443, 1091] -> 'ó' [x00F3, 243]
+  '?' [x0423, 1059] -> 'Ó' [x00D3, 211]
+  '?' [x0444, 1092] -> 'ô' [x00F4, 244]
+  '?' [x0424, 1060] -> 'Ô' [x00D4, 212]
+  '?' [x0445, 1093] -> 'o' [x00F5, 245]
+  '?' [x0425, 1061] -> 'O' [x00D5, 213]
+  '?' [x0446, 1094] -> 'ö' [x00F6, 246]
+  '?' [x0426, 1062] -> 'Ö' [x00D6, 214]
+  '?' [x0447, 1095] -> 'o' [x00F8, 248]
+  '?' [x0427, 1063] -> 'O' [x00D8, 216]
+  '?' [x0448, 1096] -> 'u' [x00F9, 249]
+  '?' [x0428, 1064] -> 'U' [x00D9, 217]
+  '?' [x0449, 1097] -> 'ú' [x00FA, 250]
+  '?' [x0429, 1065] -> 'Ú' [x00DA, 218]
+  '?' [x044A, 1098] -> 'u' [x00FB, 251]
+  '?' [x042A, 1066] -> 'U' [x00DB, 219]
+  '?' [x044E, 1102] -> 'ü' [x00FC, 252]
+  '?' [x042E, 1070] -> 'Ü' [x00DC, 220]
+  '?' [x044F, 1103] -> 'ý' [x00FD, 253]
+  '?' [x042F, 1071] -> 'Ý' [x00DD, 221]
+  '?' [x044B, 1099] -> '?' [x00FE, 254]
+  '?' [x044C, 1100] -> 'a' [x00AA, 170]
+
+wfl-me-cs.tbl
+CONVERSION TABLE:
+  'è' [x010D, 269] -> 'a' [x00E0, 224]
+  'È' [x010C, 268] -> 'A' [x00C0, 192]
+  'ø' [x0159, 345] -> 'â' [x00E2, 226]
+  'Ø' [x0158, 344] -> 'Â' [x00C2, 194]
+  'š' [x0161, 353] -> 'a' [x00E3, 227]
+  'Š' [x0160, 352] -> 'A' [x00C3, 195]
+  '' [x0165, 357] -> 'a' [x00E5, 229]
+  '' [x0164, 356] -> 'A' [x00C5, 197]
+  'ž' [x017E, 382] -> 'a' [x00E6, 230]
+  'Ž' [x017D, 381] -> 'A' [x00C6, 198]
+  'ï' [x010F, 271] -> 'ç' [x00E7, 231]
+  'ì' [x011B, 283] -> 'e' [x00E8, 232]
+  'ò' [x0148, 328] -> 'e' [x00EA, 234]
+  'ù' [x016F, 367] -> 'ë' [x00EB, 235]
+
+wfl-me-en.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+  
+wfl-me-et.tbl
+CONVERSION TABLE:
+  'š' [x0161, 353] -> 'a' [x00E0, 224]
+  'Š' [x0160, 352] -> 'A' [x00C0, 192]
+  'ž' [x017E, 382] -> 'á' [x00E1, 225]
+  'Ž' [x017D, 381] -> 'Á' [x00C1, 193]
+
+wfl-me-fr.tbl
+CONVERSION TABLE: 
+  empty (no conversions needed)
+  
+wfl-me-hu.tbl
+CONVERSION TABLE:
+  'õ' [x0151, 337] -> 'a' [x00E0, 224]
+  'û' [x0171, 369] -> 'â' [x00E2, 226]
+
+wfl-me-ro.tbl
+CONVERSION TABLE:
+  'º' [x015F, 351] -> 'a' [x00E0, 224]
+  'ª' [x015E, 350] -> 'A' [x00C0, 192]
+  'þ' [x0163, 355] -> 'á' [x00E1, 225]
+  'Þ' [x0162, 354] -> 'Á' [x00C1, 193]
+  'ã' [x0103, 259] -> 'a' [x00E3, 227]
+
+wfl-me-sl.tbl 
+CONVERSION TABLE:
+  'è' [x010D, 269] -> 'a' [x00E0, 224]
+  'È' [x010C, 268] -> 'A' [x00C0, 192]
+  'š' [x0161, 353] -> 'á' [x00E1, 225]
+  'Š' [x0160, 352] -> 'Á' [x00C1, 193]
+  'ž' [x017E, 382] -> 'â' [x00E2, 226]
+  'Ž' [x017D, 381] -> 'Â' [x00C2, 194]
+  'æ' [x0107, 263] -> 'a' [x00E3, 227]
+  
+wfl-me-sr.tbl
+CONVERSION TABLE:
+  'æ' [x0107, 263] -> 'w' [x0077, 119]
+  'Æ' [x0106, 262] -> 'W' [x0057,  87]
+  'è' [x010D, 269] -> 'a' [x00E0, 224]
+  'È' [x010C, 268] -> 'A' [x00C0, 192]
+  'š' [x0161, 353] -> 'á' [x00E1, 225]
+  'Š' [x0160, 352] -> 'Á' [x00C1, 193]
+  'ž' [x017E, 382] -> 'â' [x00E2, 226]
+  'Ž' [x017D, 381] -> 'Â' [x00C2, 194]
+  'ð' [x0111, 273] -> 'a' [x00E3, 227]

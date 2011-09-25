@@ -1,0 +1,21 @@
+RDR trees were generated from Multext & Multext-East lexicons of lemmatized words.
+Bacause of licence on Lexicon we can provide only two trees.
+
+data sources, languages and filenames are:
+
+multext        english     rdr-m-en.txt
+multext        french      rdr-m-fr.txt
+multext        german      rdr-m-ge.txt
+multext        italian     rdr-m-it.txt
+multext        spanish     rdr-m-sp.txt
+multext-east   bulgarian   rdr-me-bg.txt
+multext-east   chech       rdr-me-cs.txt
+multext-east   english     rdr-me-en.txt     (provided)
+multext-east   estonian    rdr-me-et.txt
+multext-east   french      rdr-me-fr.txt
+multext-east   hungarian   rdr-me-hu.txt
+multext-east   romanian    rdr-me-ro.txt
+multext-east   slovene     rdr-me-sl.txt     (provided)
+multext-east   serbian     rdr-me-sr.txt	
+	
+	

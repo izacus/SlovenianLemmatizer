@@ -1,0 +1,11 @@
+This directory contains four versions of multext & multext lexicons. Read the
+"about.txt" files in each directory for detailed description. Prebuild 
+lemamtizers and rdrtrees are based on unicode version of lexicons.
+
+Versions:
+  original: original lexicons using original encoding
+  unicode:  lexicons in unicode encoding - no character changes
+  ascii-latin1: lexicons converted to latin1 encoding with changed characters - 
+                see enclosed warnings
+  ascii-latin1, lowercase: lexicons converted to latin1 encoding with changed
+                           and lowercased characters - see enclosed warnings

@@ -1,0 +1,180 @@
+/******************************************************************************
+This file is part of the lemmagen library. It gives support for lemmatization.
+Copyright (C) 2006-2007 Matjaz Jursic <matjaz@gmail.com>
+
+The lemmagen library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+******************************************************************************/
+
+//"compile" with options flex++ -8 -o<.cpp>  -h<.h> -g<include statment> <this file>
+	
+%name Lexer     
+%define CLASS RdrLexer    
+
+%define IOSTREAM
+
+%define MEMBERS \
+		public: \
+		private: \
+			int iLine; \
+			int iColm; \
+			YY_Parser_STYPE *uStxVal; \
+			void debugPrt(const char *acToken, unsigned const char *acText, \
+			         const char *acOldState, const char *acNewState, \
+			         const char *acReturn);
+		
+%define CONSTRUCTOR_PARAM YY_Parser_STYPE *YY_Parser_LVAL, \
+						  YY_Parser_LTYPE *YY_Parser_LLOC
+%define CONSTRUCTOR_CODE \
+		iLine = 1; \
+		iColm = 0; \
+		uStxVal = YY_Parser_LVAL; \
+		YY_Parser_LLOC->piLine = &iLine; \
+		YY_Parser_LLOC->piColm = &iColm; \
+		YY_Parser_LLOC->piLeng = &yyleng; \
+		YY_Parser_LLOC->pacText = &yytext; \
+		BEGIN COMMENT;
+		
+		
+%define LEX_RETURN RdrParser::YY_Parser_ENUM_TOKEN
+%define LEX yylex_lexer
+	
+%header{ 
+	#include "../header/RdrParser.h"
+
+	#define YY_USER_ACTION DBGPRT iColm +=yyleng;
+	#undef yyterminate
+	#define yyterminate() return RdrParser::EOFNULL	
+%}
+
+%{
+	//#define DBG
+	#ifdef DBG	
+		char *dbgTbl[][4] =
+				{{"", "?-1", "", ""},
+				{"Comment", "COMMENT", "", "NO RETURN"},
+				{"Rule", "COMMENT", "RULE", "RULE_START"},
+				{"ExcStart", "COMMENT", "RULE", "EXC_START"},
+				{"ExcEnd", "COMMENT", "RULE", "EXC_END"},
+				{"NewLine", "COMMENT", "", "NO RETURN"},
+				{"<<EOF>>", "COMMENT", "", "EOFNULL"},
+				{"Id", "RULE", "", "ID"},
+				{"If", "RULE", "", "IF"},
+				{"Then", "RULE", "", "THEN"},
+				{"Exc", "RULE", "", "EXC"},
+				{"Lbrac", "RULE", "", "LBRAC"},
+				{"Rbrac", "RULE", "", "RBRAC"},
+				{"Transf", "RULE", "", "TRANSF"},
+				{"WhtSpcChar", "RULE", "", "NO RETURN"},
+				{"StrConst", "RULE", "", "STRING"},
+				{"ChrConst", "RULE", "", "STRING"},
+				{"DecConst", "RULE", "", "INT"},
+				{"Semicol", "RULE", "COMMENT", "RULE_END"},
+				{"NewLine", "RULE", "COMMENT", "RULE_END"},
+				{"EOF",  "RULE", "COMMENT", "RULE_END"},
+				{".Any", "RULE", "", "ERROR"},
+				{"", "?+1", "", ""},
+				{"", "?+2", "", ""}};	
+		#define DBGPRT debugPrt(dbgTbl[yy_act][0], yytext, dbgTbl[yy_act][1], dbgTbl[yy_act][2], dbgTbl[yy_act][3]);
+	#else
+		#define DBGPRT
+		
+	#endif	
+%}
+
+//--CHARACTER SEQUENCES DEFINITION-----------------------------------------------------------------------
+//WhtSpcChar = Form feed, Backspace, Horizontal tab, Vertical tab, Space
+//NewLine = Carriage return, Newline, Carriage return & Newline
+//AnyExeptNl = Any character except newline
+WhtSpcChar	[\f\b\t\v ]*
+NewLine		\r|\n|\r\n
+Comment		[^\r\nRr{:]*|[Rr{:]
+
+//Decimal, String and Chrar constants
+DecStart	1|2|3|4|5|6|7|8|9
+DecDigit	0|{DecStart}
+CharChar	[^\n\r\'\\]|(\\.)
+StringChar	[^\n\r\"\\]|(\\.)
+
+IntConst	{DecStart}({DecDigit}){0,8}
+ChrConst	\'{CharChar}*\'
+StrConst	\"{StringChar}*\"
+
+//Kewords (rule:)  (n, name, ruleid, id)  (i, if)  (t, then) (ew, enitrew eword entireword)
+Rule		[Rr][Uu][Ll][Ee]: 									
+Id			[Nn]([Aa][Mm][Ee])?|([Rr][Uu][Ll][Ee])?[Ii][Dd]
+If			[Ii][Ff]?|[Ee][Nn][Dd]([Ii][Nn][Gg])?|[Ss][Uu][Ff]([Ff][Ii][Xx])?
+Then		[Tt]([Hh][Ee][Nn])?|[Tt][Rr][Aa][Nn][Ss]([Ff][Oo][Rr][Mm])?
+Exc			[Ee]([Xx][Cc]([Ee][Pp][Tt]([Ii][Oo][Nn][Ss])?)?)?		
+EntWrd      [Ee]([Nn][Tt][Ii][Rr][Ee])?[Ww]([Oo][Rr][Dd])?
+
+//Exception list start, end
+ExcStart	[{][:]
+ExcEnd		[:][}]
+
+//Operators (->, -->, --->, ---->, ...)
+Semicol		";"
+Lbrac		"("
+Rbrac		")"
+Transf		"-"+">"
+
+%x COMMENT RULE
+
+%%
+
+	//--BEGLNCOMM-------------------------------------------------------------------------------------------
+<COMMENT>{Comment}	
+<COMMENT>{Rule}		BEGIN RULE; return RdrParser::RULE_START;
+<COMMENT>{ExcStart}	return RdrParser::EXC_START;
+<COMMENT>{ExcEnd}	return RdrParser::EXC_END;
+<COMMENT>{NewLine}	iLine++; iColm=1;
+<COMMENT><<EOF>>	yyterminate();
+
+	//--RULE------------------------------------------------------------------------------------------------
+<RULE>{Id}			return RdrParser::ID;
+<RULE>{If}			return RdrParser::IF;
+
+<RULE>{Then}		return RdrParser::THEN;
+<RULE>{Exc}			return RdrParser::EXC;
+<RULE>{EntWrd}		return RdrParser::ENTWRD;
+
+<RULE>{Lbrac}		return RdrParser::LBRAC;
+<RULE>{Rbrac}		return RdrParser::RBRAC;
+<RULE>{Transf}		return RdrParser::TRANSF;
+					
+<RULE>{WhtSpcChar}	
+					
+<RULE>{StrConst}	uStxVal->acVal = Str::norm(yytext); return RdrParser::STRING;
+<RULE>{ChrConst}	uStxVal->acVal = Str::norm(yytext); return RdrParser::STRING;
+<RULE>{IntConst}	uStxVal->iVal = atoi((char *)yytext); return RdrParser::INT;
+					
+<RULE>{Semicol}		BEGIN COMMENT; return RdrParser::RULE_END;
+<RULE>{NewLine}		iLine++; iColm=1; BEGIN COMMENT; return RdrParser::RULE_END;
+<RULE><<EOF>>		BEGIN COMMENT; return RdrParser::RULE_END;
+					
+<RULE>.				return RdrParser::ERROR;
+
+%%
+
+void RdrLexer::debugPrt(const char *acToken, unsigned const char *acText, 
+						const char *acOldState, const char *acNewState,
+						const char *acReturn) {
+	*yyout << "\tlexer:" << 
+		" <" << acOldState << ">" <<
+		" --> <" << acNewState << ">" <<
+		" token{" << acToken << "}" <<
+		" = \"" << (acText[0]!='\n' ? acText: (byte*) "\\n") << "\"" <<
+		" return " << acReturn <<
+		"\n";
+}

@@ -1,0 +1,10 @@
+Diploma is describing lemmagen funcionality and applications on enclosed data.
+
+ Slovene title: Implementacija uèinkovitega algoritma za gradnjo, uporabo in evaluacijo lematizatorjev tipa RDR
+ English title: Efficient Implementation of a System for Construction, Application and Evaluation of RDR Type Lemmatizers
+        Author: Matjaz Jursic
+        Mentor: prof. dr. Blaz Zupan
+Working mentor: prof. dr. Nada Lavrac
+      Language: slovene
+
+

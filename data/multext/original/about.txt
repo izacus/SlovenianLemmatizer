@@ -1,0 +1,21 @@
+Multext & Multext-East lexicons are licenced so we can not provide them all.
+Here are just two language examples: slovene an english lexicon.
+This two examples are not modified in any way.
+
+All languages are:
+
+[corpus]       [language]  [file name]    [encoding]           [example]    
+multext        english     wfl-m-en.tbl   latin1  (iso-8859-1) no
+multext        french      wfl-m-fr.tbl   latin1  (iso-8859-1) no
+multext        german      wfl-m-ge.tbl   latin1  (iso-8859-1) no
+multext        italian     wfl-m-it.tbl   latin1  (iso-8859-1) no
+multext        spanish     wfl-m-sp.tbl   latin1  (iso-8859-1) no
+multext-east   bulgarian   wfl-me-bg.tbl  unicode (utf8)       no
+multext-east   chech       wfl-me-cs.tbl  unicode (utf8)       no
+multext-east   english     wfl-me-en.tbl  unicode (utf8)       present
+multext-east   estonian    wfl-me-et.tbl  unicode (utf8)       no
+multext-east   french      wfl-me-fr.tbl  unicode (utf8)       no
+multext-east   hungarian   wfl-me-hu.tbl  unicode (utf8)       no
+multext-east   romanian    wfl-me-ro.tbl  unicode (utf8)       no
+multext-east   slovene     wfl-me-sl.tbl  unicode (utf8)       present
+multext-east   serbian     wfl-me-sr.tbl  unicode (utf8)       no
