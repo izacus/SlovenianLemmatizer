@@ -1,2 +1,0 @@
-Lexicon files converted into unicode (utf-8) encoding, without changing 
-characters.

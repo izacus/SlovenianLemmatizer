@@ -1,0 +1,18 @@
+data sources, languages and filenames are:
+
+multext        english     lem-m-en.bin
+multext        french      lem-m-fr.bin
+multext        german      lem-m-ge.bin
+multext        italian     lem-m-it.bin
+multext        spanish     lem-m-sp.bin
+multext-east   bulgarian   lem-me-bg.bin
+multext-east   chech       lem-me-cs.bin
+multext-east   english     lem-me-en.bin
+multext-east   estonian    lem-me-et.bin
+multext-east   french      lem-me-fr.bin
+multext-east   hungarian   lem-me-hu.bin
+multext-east   romanian    lem-me-ro.bin
+multext-east   slovene     lem-me-sl.bin
+multext-east   serbian     lem-me-sr.bin	
+	
+	
