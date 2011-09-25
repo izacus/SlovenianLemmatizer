@@ -1,10 +1,9 @@
 CXX := g++
-CPP := cc
-CXXFLAGS := -O3 -fPIC
-CPPFLAGS := -O3
+CXXFLAGS := -O3 -fPIC -fomit-frame-pointer -ffast-math -march=native
 
 SRCDIR := ./src
-OBJECTS := $(SRCDIR)/RdrLemmatizer.o $(SRCDIR)/lemmatizer.o
+BINDIR := ./bin
+OBJECTS := $(SRCDIR)/RdrLemmatizer.o $(SRCDIR)/sl_lemmatizer.o
 LIBNAME := libLemmatizer.so
 EXECNAME := lemmatizer
 
@@ -14,11 +13,11 @@ $(SRCDIR)/%.o: %.cpp
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $(input) -o $(output)
 
 library: $(OBJECTS)
-	$(CXX) $(OBJECTS) -shared -fPIC -o $(LIBNAME)
+	$(CXX) $(OBJECTS) -shared -fPIC -o $(BINDIR)/$(LIBNAME)
 
 testExecutable: $(OBJECTS)
-	$(CXX) $(CPPFLAGS) -c $(SRCDIR)/main.c -o $(SRCDIR)/main.o
-	$(CXX) $(OBJECTS) $(SRCDIR)/main.o -o $(EXECNAME)
+	$(CXX) $(CXXFLAGS) -c $(SRCDIR)/main.c -o $(SRCDIR)/main.o
+	$(CXX) $(OBJECTS) $(SRCDIR)/main.o -o $(BINDIR)/$(EXECNAME)
 
 clean:
 	rm $(SRCDIR)/*.o

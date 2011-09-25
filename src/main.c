@@ -1,5 +1,6 @@
-#include "lemmatizer.h"
+#include "sl_lemmatizer.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char** argv)
 {
@@ -9,13 +10,15 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-    if (load_language_library(argv[1]) != STATUS_OK)
+    if (lem_load_language_library(argv[1]) != STATUS_OK)
     {
     	fprintf(stderr, "[ERROR] Failed to open language library file!\r\n");
     	return -1;
     }
 
-    char* test = lemmatize_r(argv[2]);
-    printf("%s", test);
+    char* word = lem_lemmatize_word_alloc(argv[2]);
+    printf("%s", word);
+    free(word);
+
     return 0;
 }
