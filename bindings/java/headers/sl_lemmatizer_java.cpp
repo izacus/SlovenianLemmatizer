@@ -12,6 +12,7 @@
 // Private lemmatizer instance
 RdrLemmatizer *lem_instance = NULL;
 char* lemmatizer_buffer;
+int lemmatizer_buffer_length = 512;
 
 JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary
   (JNIEnv *jniEnv, jobject jObject, jstring jFileName)
@@ -34,7 +35,7 @@ JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary
 	}
 
 	lem_instance = new RdrLemmatizer(fileName);
-	lemmatizer_buffer = new char[255];
+	lemmatizer_buffer = new char[lemmatizer_buffer_length];
 
 	return 0;
 };
@@ -48,6 +49,13 @@ JNIEXPORT jstring JNICALL Java_si_virag_lemmatizer_SlLemmatizer_lemmatize
 		jniEnv->ThrowNew(exceptionClass, "Language data file not loaded, call loadLanguageLibrary first!");
 		return jniEnv->NewStringUTF("");
 	}
+
+    if (jniEnv->GetStringUTFLength(jstring) > (lemmatizer_buffer_length - 1)) 
+    {
+        delete lemmatizer_buffer;
+        lemmatizer_buffer_length = lemmatizer_buffer_length * 2;
+        lemmatizer_buffer = new char[lemmatizer_buffer_length];
+    }
 
 	lem_instance->Lemmatize(jniEnv->GetStringUTFChars(jWord,0), lemmatizer_buffer);
 	return jniEnv->NewStringUTF(lemmatizer_buffer);
