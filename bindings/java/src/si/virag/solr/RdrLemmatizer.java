@@ -40,10 +40,6 @@ public class RdrLemmatizer extends TokenFilter
 		String str = new String(buffer, 0, bufferLength);
 		char[] lemmatized = lemmatizer.lemmatize(str).toCharArray();
 		System.arraycopy(lemmatized, 0, buffer, 0, lemmatized.length);
-		
-		String newbuffer = new String(buffer, 0, lemmatized.length);
-		System.out.println(str + "->" + newbuffer + " (" + buffer.length + ")");
-		
 		return lemmatized.length;
 	}
 }
