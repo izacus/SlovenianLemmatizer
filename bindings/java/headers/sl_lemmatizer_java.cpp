@@ -4,8 +4,8 @@
  *  Created on: Sep 25, 2011
  *      Author: Jernej Virag
  */
-#include <jni.h>
 #include <iostream>
+#include <jni.h>
 #include "sl_lemmatizer_java.h"
 #include "RdrLemmatizer.h"
 
@@ -50,7 +50,7 @@ JNIEXPORT jstring JNICALL Java_si_virag_lemmatizer_SlLemmatizer_lemmatize
 		return jniEnv->NewStringUTF("");
 	}
 
-    if (jniEnv->GetStringUTFLength(jstring) > (lemmatizer_buffer_length - 1)) 
+    if (jniEnv->GetStringUTFLength(jWord) > (lemmatizer_buffer_length - 1)) 
     {
         delete lemmatizer_buffer;
         lemmatizer_buffer_length = lemmatizer_buffer_length * 2;
