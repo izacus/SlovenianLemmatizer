@@ -5,9 +5,13 @@ public class SlLemmatizer
 	private native int loadLanguageLibrary(String fileName);
 	public native String lemmatize(String word);
 	
-	public SlLemmatizer(String languageFile)
+	static 
 	{
 		System.loadLibrary("Lemmatizer");
+	}
+	
+	public SlLemmatizer(String languageFile)
+	{
 		this.loadLanguageLibrary(languageFile);
 	}
 }

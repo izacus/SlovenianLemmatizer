@@ -23,7 +23,7 @@ JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary
 	if (!dataFile.good()) {
 		dataFile.close();
 		jclass exceptionClass = jniEnv->FindClass("java/io/IOException");
-		jniEnv->ThrowNew(exceptionClass, "Could not open library file!");
+		jniEnv->ThrowNew(exceptionClass, "Could not find language dictionary file, check path!");
 		return -1;
 	};
 	dataFile.close();
