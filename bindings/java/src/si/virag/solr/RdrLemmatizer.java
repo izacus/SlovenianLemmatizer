@@ -34,6 +34,7 @@ public class RdrLemmatizer extends TokenFilter
 	
 	private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
 	private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
+
 	
 	protected RdrLemmatizer(TokenStream input, String dictionaryPath) 
 	{
@@ -65,10 +66,7 @@ public class RdrLemmatizer extends TokenFilter
 			return bufferLength;
 		}
 		
-		String str = new String(buffer, 0, bufferLength);
-		char[] lemmatized = lemmatizer.lemmatize(str).toCharArray();
-		System.arraycopy(lemmatized, 0, buffer, 0, lemmatized.length);
-		return lemmatized.length;
+		return lemmatizer.lemmatizeWord(buffer, bufferLength);
 	}
 }
 
