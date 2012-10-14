@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 package si.virag.solr;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
@@ -35,6 +36,8 @@ public class RdrLemmatizer extends TokenFilter
 	private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
 	private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
 
+	private ByteBuffer inputBuffer;
+	private ByteBuffer outputBuffer;
 	
 	protected RdrLemmatizer(TokenStream input, String dictionaryPath) 
 	{
@@ -43,6 +46,9 @@ public class RdrLemmatizer extends TokenFilter
 		{
 			lemmatizer = new SlLemmatizer(dictionaryPath);
 		}
+		
+		inputBuffer = ByteBuffer.allocateDirect(128);
+		outputBuffer = ByteBuffer.allocateDirect(128);
 	}
 	
 	@Override
@@ -50,23 +56,45 @@ public class RdrLemmatizer extends TokenFilter
 	{
 		if (this.input.incrementToken())
 		{
-			termAtt.setLength(this.parseBuffer(termAtt.buffer(), termAtt.length()));
+			this.processBuffer(termAtt.buffer(), termAtt.length());
 			return true;
 		}
 		
 		return false;
 	}
 	
-	protected int parseBuffer(char[] buffer, int bufferLength)
+	private void ensureBufferSpace(int length)
+	{
+		// Make sure enough space is available in the buffer, consider worst-case scenario of 4-byte
+		// characters.
+		if (inputBuffer.capacity() < (4 * length) + 1)
+		{
+			inputBuffer = ByteBuffer.allocateDirect(4 * length + 1);
+		}
+		
+		if (outputBuffer.capacity() < (4 * length) + 1)
+		{
+			outputBuffer = ByteBuffer.allocateDirect(4 * length + 1);
+		}
+	}
+	
+	protected void processBuffer(char[] buffer, int bufferLength)
 	{
 		if (typeAtt.equals("<HOST>") || 
 			typeAtt.equals("<EMAIL>") ||
 			bufferLength < 4) 
 		{
-			return bufferLength;
+			return;
 		}
 		
-		return lemmatizer.lemmatizeWord(buffer, bufferLength);
+		ensureBufferSpace(bufferLength);
+		inputBuffer.rewind();
+		UnicodeUtil.UTF16toUTF8(buffer, bufferLength, inputBuffer);
+		// NUL terminate the string
+		inputBuffer.put((byte)0x0);
+		int byteLength = lemmatizer.lemmatize(inputBuffer, outputBuffer);
+		outputBuffer.rewind();
+		UnicodeUtil.UTF8toUTF16(outputBuffer, byteLength, termAtt);
 	}
 }
 

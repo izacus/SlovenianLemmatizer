@@ -1,6 +1,8 @@
-package si.virag.lemmatizer;
+package si.virag.solr;
 
 import java.nio.ByteBuffer;
+
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -159,8 +161,9 @@ public class UnicodeUtil
 	}
 	 
 	 
-	public static int UTF8toUTF16(ByteBuffer utf8, int length, char[] output) 
+	public static int UTF8toUTF16(ByteBuffer utf8, int length, CharTermAttribute outputAttr) 
 	{
+		char[] output = outputAttr.buffer();
 		int offset = 0;
 		int out_offset = 0;
 		final int limit = length;
@@ -169,8 +172,14 @@ public class UnicodeUtil
 			int b = utf8.get() & 0xff;
 			
 			// Check for NUL terminator
-			if (b == 0x0 || out_offset == output.length)
+			if (b == 0x0)
 				break;
+			
+			// Resize output buffer if necessary
+			if (out_offset == output.length)
+			{
+				output = outputAttr.resizeBuffer(output.length * 2);
+			}
 			
 			if (b < 0xc0) 
 			{
@@ -207,6 +216,7 @@ public class UnicodeUtil
 			}
 		}
 		
+		outputAttr.setLength(out_offset);
 		return out_offset;
 	}
 }
