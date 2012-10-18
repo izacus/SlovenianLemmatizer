@@ -22,9 +22,9 @@ package si.virag.solr;
 import java.util.Map;
 
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.solr.analysis.BaseTokenFilterFactory;
+import org.apache.lucene.analysis.util.TokenFilterFactory;
 
-public class RdrLemmatizerFactory extends BaseTokenFilterFactory  
+public class RdrLemmatizerFactory extends TokenFilterFactory  
 {
 	String dictionaryPath;
 	Map<String, String> args;
@@ -41,7 +41,6 @@ public class RdrLemmatizerFactory extends BaseTokenFilterFactory
 		if (!args.containsKey("dictionary"))
 		{
 			String message = "Missing dictinary property for RdrLemmatizer!"; 
-			log.error(message);
 			throw new RuntimeException(message);
 		}
 		else

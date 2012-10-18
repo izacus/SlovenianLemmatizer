@@ -19,10 +19,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 package si.virag.lemmatizer;
 
+import java.nio.ByteBuffer;
+
 public class SlLemmatizer 
 {
 	private native int loadLanguageLibrary(String fileName);
-	public native String lemmatize(String word);
+	public native int lemmatize(ByteBuffer inputWord, ByteBuffer output);
 	
 	static 
 	{
