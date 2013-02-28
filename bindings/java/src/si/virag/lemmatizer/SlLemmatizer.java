@@ -19,11 +19,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 package si.virag.lemmatizer;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SlLemmatizer 
 {
-	private native int loadLanguageLibrary(String fileName);
+	private static final Logger log = LoggerFactory.getLogger(SlLemmatizer.class);
+	private native int loadLanguageLibrary(String fileName) throws IOException;
 	public native int lemmatize(ByteBuffer inputWord, ByteBuffer output);
 	
 	static 
@@ -33,6 +38,14 @@ public class SlLemmatizer
 	
 	public SlLemmatizer(String languageFile)
 	{
-		this.loadLanguageLibrary(languageFile);
+		log.info("Lemmatizer loading language file: " + languageFile);
+		try {
+			this.loadLanguageLibrary(languageFile);
+		} catch (IOException e) {
+			String message = "Lemmatizer language file not found: " + languageFile;
+			log.error(message);
+			throw new RuntimeException(message);
+		}
+		
 	}
 }
