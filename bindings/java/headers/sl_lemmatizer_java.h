@@ -18,10 +18,10 @@ JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary
 /*
  * Class:     si_virag_lemmatizer_SlLemmatizer
  * Method:    lemmatize
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Signature: (Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;)I
  */
-JNIEXPORT jstring JNICALL Java_si_virag_lemmatizer_SlLemmatizer_lemmatize
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_lemmatize
+  (JNIEnv *, jobject, jobject, jobject);
 
 #ifdef __cplusplus
 }

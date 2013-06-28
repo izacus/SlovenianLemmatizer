@@ -1,9 +1,22 @@
-/*
- * sl_lemmatizer_java.cpp
- *
- *  Created on: Sep 25, 2011
- *      Author: Jernej Virag
- */
+/******************************************************************************
+This file is part of the lemmagen library. It gives support for lemmatization.
+Copyright (C) 2011 Jernej Virag <jernej@virag.si>
+
+The lemmagen library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+******************************************************************************/
+
 #include <iostream>
 #include <jni.h>
 #include "sl_lemmatizer_java.h"
@@ -11,11 +24,8 @@
 
 // Private lemmatizer instance
 RdrLemmatizer *lem_instance = NULL;
-char* lemmatizer_buffer;
-int lemmatizer_buffer_length = 512;
 
-JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary
-  (JNIEnv *jniEnv, jobject jObject, jstring jFileName)
+JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary(JNIEnv *jniEnv, jobject jObject, jstring jFileName)
 {
 	const char* fileName = jniEnv->GetStringUTFChars(jFileName, 0);
 	// Check if file exists first
@@ -31,34 +41,25 @@ JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_loadLanguageLibrary
 	if (lem_instance != NULL)
 	{
 		delete lem_instance;
-		delete lemmatizer_buffer;
 	}
 
 	lem_instance = new RdrLemmatizer(fileName);
-	lemmatizer_buffer = new char[lemmatizer_buffer_length];
-
 	return 0;
 };
 
-JNIEXPORT jstring JNICALL Java_si_virag_lemmatizer_SlLemmatizer_lemmatize
-  (JNIEnv *jniEnv, jobject jObject, jstring jWord)
+JNIEXPORT jint JNICALL Java_si_virag_lemmatizer_SlLemmatizer_lemmatize(JNIEnv *jniEnv, jobject jObject, jobject inputWord, jobject output)
 {
 	if (lem_instance == NULL)
 	{
 		jclass exceptionClass = jniEnv->FindClass("java/lang/Exception");
 		jniEnv->ThrowNew(exceptionClass, "Language data file not loaded, call loadLanguageLibrary first!");
-		return jniEnv->NewStringUTF("");
+		return 0;
 	}
 
-    if (jniEnv->GetStringUTFLength(jWord) > (lemmatizer_buffer_length - 1)) 
-    {
-        delete lemmatizer_buffer;
-        lemmatizer_buffer_length = lemmatizer_buffer_length * 2;
-        lemmatizer_buffer = new char[lemmatizer_buffer_length];
-    }
-
-	lem_instance->Lemmatize(jniEnv->GetStringUTFChars(jWord,0), lemmatizer_buffer);
-	return jniEnv->NewStringUTF(lemmatizer_buffer);
+  char* cWord = (char*)jniEnv->GetDirectBufferAddress(inputWord);
+  char* cOutput = (char*)jniEnv->GetDirectBufferAddress(output);
+  lem_instance->Lemmatize(cWord, cOutput);
+  return strlen(cOutput);
 }
 
 
