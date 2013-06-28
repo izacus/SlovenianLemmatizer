@@ -1,26 +1,6 @@
-/******************************************************************************
-This file is part of the lemmagen library. It gives support for lemmatization.
-Copyright (C) 2011 Jernej Virag <jernej@virag.si>
-
-The lemmagen library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-******************************************************************************/
-
 package si.virag.solr;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
@@ -35,9 +15,6 @@ public class RdrLemmatizer extends TokenFilter
 	
 	private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
 	private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
-
-	private ByteBuffer inputBuffer;
-	private ByteBuffer outputBuffer;
 	
 	protected RdrLemmatizer(TokenStream input, String dictionaryPath) 
 	{
@@ -46,9 +23,6 @@ public class RdrLemmatizer extends TokenFilter
 		{
 			lemmatizer = new SlLemmatizer(dictionaryPath);
 		}
-		
-		inputBuffer = ByteBuffer.allocateDirect(128);
-		outputBuffer = ByteBuffer.allocateDirect(128);
 	}
 	
 	@Override
@@ -56,46 +30,26 @@ public class RdrLemmatizer extends TokenFilter
 	{
 		if (this.input.incrementToken())
 		{
-			this.processBuffer(termAtt.buffer(), termAtt.length());
+			termAtt.setLength(this.parseBuffer(termAtt.buffer(), termAtt.length()));
 			return true;
 		}
 		
 		return false;
 	}
 	
-	private void ensureBufferSpace(int length)
+	protected int parseBuffer(char[] buffer, int bufferLength)
 	{
-		// Make sure enough space is available in the buffer, consider worst-case scenario of 4-byte
-		// characters.
-		if (inputBuffer.capacity() < (4 * length) + 1)
-		{
-			inputBuffer = ByteBuffer.allocateDirect(4 * length + 1);
-		}
-		
-		if (outputBuffer.capacity() < (4 * length) + 1)
-		{
-			outputBuffer = ByteBuffer.allocateDirect(4 * length + 1);
-		}
-	}
-	
-	protected void processBuffer(char[] buffer, int bufferLength)
-	{
-		if (typeAtt.equals("<URL>") || 
+		if (typeAtt.equals("<HOST>") || 
 			typeAtt.equals("<EMAIL>") ||
-			typeAtt.equals("<NUM>") ||
 			bufferLength < 4) 
 		{
-			return;
+			return bufferLength;
 		}
 		
-		ensureBufferSpace(bufferLength);
-		inputBuffer.rewind();
-		UnicodeUtil.UTF16toUTF8(buffer, bufferLength, inputBuffer);
-		// NUL terminate the string
-		inputBuffer.put((byte)0x0);
-		int byteLength = lemmatizer.lemmatize(inputBuffer, outputBuffer);
-		outputBuffer.rewind();
-		UnicodeUtil.UTF8toUTF16(outputBuffer, byteLength, termAtt);
+		String str = new String(buffer, 0, bufferLength);
+		char[] lemmatized = lemmatizer.lemmatize(str).toCharArray();
+		System.arraycopy(lemmatized, 0, buffer, 0, lemmatized.length);
+		return lemmatized.length;
 	}
 }
 
