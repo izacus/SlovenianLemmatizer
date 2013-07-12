@@ -1,0 +1,29 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>si.virag</groupId>
+  <artifactId>sl_lemmatizer</artifactId>
+  <version>1.0</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+          <dependency>
+                  <groupId>org.apache.solr</groupId>
+                  <artifactId>solr-core</artifactId>
+                  <version>4.3.1</version>
+                  <scope>compile</scope>
+          </dependency>
+          <dependency>
+                  <groupId>org.apache.lucene</groupId>
+                  <artifactId>lucene-analyzers-common</artifactId>
+                  <version>4.3.1</version>
+                  <scope>compile</scope>
+          </dependency>
+  </dependencies>
+
+  <build>
+          <sourceDirectory>bindings/java/src</sourceDirectory>
+  </build>
+</project>

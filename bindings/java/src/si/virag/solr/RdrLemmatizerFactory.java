@@ -29,15 +29,9 @@ public class RdrLemmatizerFactory extends TokenFilterFactory
 	String dictionaryPath;
 	Map<String, String> args;
 	
-	@Override
-	public Map<String, String> getArgs() 
+	public RdrLemmatizerFactory(Map<String, String> args) 
 	{
-		return args;
-	}
-
-	@Override
-	public void init(Map<String, String> args) 
-	{
+        super(args);
 		if (!args.containsKey("dictionary"))
 		{
 			String message = "Missing dictinary property for RdrLemmatizer!"; 
