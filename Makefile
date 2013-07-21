@@ -26,9 +26,9 @@ java:
 	$(CXX) $(CXXFLAGS) -I$(SRCDIR) -I$(JAVAPATH) -I$(JAVAPATH)/linux -c $(JAVAPATH)/sl_lemmatizer_java.cpp -o $(SRCDIR)/sl_java_headers.o
 
 osx: java testExecutable
-	$(CXX) $(OBJECTS) -dynamiclib -fPIC -o $(BINDIR)/$(LIBNAME).dynlib
+	$(CXX) $(OBJECTS) -dynamiclib -fPIC -o $(BINDIR)/$(LIBNAME).dylib
 
 clean:
 	rm $(SRCDIR)/*.o
-	rm $(BINDIR)/$(LIBNAME)
+	rm $(BINDIR)/$(LIBNAME).*
 	rm $(BINDIR)/$(EXECNAME)
