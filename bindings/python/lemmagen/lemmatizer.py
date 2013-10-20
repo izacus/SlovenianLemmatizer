@@ -1,20 +1,27 @@
 from ctypes import cdll, create_string_buffer
+import os
+import lemmagen
 
-class RdrLemmatizer(object):
+class Lemmatizer(object):
     STATUS_OK = 0
     STATUS_FILE_NOT_FOUND = -1
 
-    def __init__(self, dictionary_path, library_path=None):
+    def __init__(self, dictionary=lemmagen.DICTIONARY_SLOVENE, library_path=None):
         """
-        @param dictionary_path: Path to lemmatizer dictionary file
+        @param dictionary: Path to lemmatizer dictionary file
         """
-        
+
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        print "This dir:", this_dir
+
         if library_path is None:
-            self._lib = cdll.LoadLibrary("libLemmatizer.so")
+            self._lib = cdll.LoadLibrary(os.path.join(this_dir, "libLemmagen.so"))
         else:
             self._lib = cdll.LoadLibrary(library_path)
 
-        result = self._lib.lem_load_language_library(dictionary_path)
+        if not dictionary.startswith("/"):
+            dictionary = os.path.join(this_dir, dictionary)
+        result = self._lib.lem_load_language_library(dictionary)
 
         if result == self.STATUS_FILE_NOT_FOUND:
             raise IOError("Lemmatizer dictionary file could not be found.")
