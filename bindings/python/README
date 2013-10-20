@@ -1,0 +1,18 @@
+LemmaGen lemmatizer module
+===========================================
+
+This is a lemmatizer for slovene and other languages.
+
+The file directory structure is as follows:
+
+dictionaries/ - Binary dictionaries for languages supported
+src/          - Lemmatizer C++ source
+
+Contributors:
+----------------
+
+Original version form Joseph Stephan Institute (http://lemmatise.ijs.si/)
+
+* Jernej Virag
+* Domen Grabec
+* Gašper Žejn
