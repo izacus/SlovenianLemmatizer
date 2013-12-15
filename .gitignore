@@ -1,0 +1,9 @@
+bindings/python/.idea
+bindings/python/dist
+MANIFEST
+bindings/python/src/sl_lemmatizer.cpp
+bindings/python/src/sl_lemmatizer.h
+bindings/python/src/RdrLemmatizer.cpp
+bindings/python/src/RdrLemmatizer.h
+.idea
+target
