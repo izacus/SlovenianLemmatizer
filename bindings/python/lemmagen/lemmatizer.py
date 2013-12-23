@@ -48,11 +48,13 @@ class Lemmatizer(object):
             raise IOError("Lemmatizer dictionary file could not be found.")
         assert(result == self.STATUS_OK)
 
-        self._output_buffer = create_string_buffer(64)
+        self._output_buffer_len = 64
+        self._output_buffer = create_string_buffer(self._output_buffer_len)
 
     def lemmatize(self, word):
-        if (self._output_buffer < 2 * len(word)):
-            self._output_buffer = create_string_buffer(2 * len(word))
+        if (self._output_buffer_len < 2 * len(word)):
+            self._output_buffer_len = 2 * len(word)
+            self._output_buffer = create_string_buffer(self._output_buffer_len)
         
         is_unicode = isinstance(word, unicode)
         if is_unicode:
