@@ -154,7 +154,7 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const{
 
 //-------------------------------------------------------------------------------------------
 //returns string representation of this node and all its subnodes
-void RdrLemmatizer::ToString(ostream &os, dword iStartAddr, int iDepth, char *acParSufx, char *acParDev, char cNewChar) const {
+void RdrLemmatizer::ToString(ostream &os, dword iStartAddr, int iDepth, const char *acParSufx, const char *acParDev, const char cNewChar) const {
 	int iAddr = iStartAddr;
 	dword *iSubs = NULL;
 	byte *bSubs = NULL;
@@ -165,7 +165,7 @@ void RdrLemmatizer::ToString(ostream &os, dword iStartAddr, int iDepth, char *ac
 	//node type
 	GETBYTEMOVE(int, iType, FlagLen);
 
-	char *acTypeName;
+	const char *acTypeName;
 	switch (iType) {
 		case TypeRule:     acTypeName="RULE"; break;
 		case TypeRuleEw:   acTypeName="RULE(entireword)"; break;
@@ -218,8 +218,8 @@ void RdrLemmatizer::ToString(ostream &os, dword iStartAddr, int iDepth, char *ac
 			strcpy(&acSufxDev[2 + iNewSufxLen],acParDev);
 
 		} else {
-			acSufx = "";
-			acSufxDev = "|";
+			acSufx = strdup("");
+			acSufxDev = strdup("|");
 		}
 		os << "[Suffix:" << acSufxDev << ",\"" << acSufx << "\"]";
 

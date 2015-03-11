@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -O3 -fPIC -fomit-frame-pointer -ffast-math
+CXXFLAGS := -O3 -fPIC -fomit-frame-pointer -ffast-math -Wno-null-conversion -Wno-null-arithmetic
 
 SRCDIR := ./src
 BINDIR := ./bin
