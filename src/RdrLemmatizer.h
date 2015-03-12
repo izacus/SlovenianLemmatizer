@@ -119,7 +119,7 @@ public:
 
 	void ToStringHex(ostream &os) const;
 	void ToString(ostream &os = cout, dword iStartAddr = DataStart, int iDepth = 0, 
-		char *acParSufx = "", char *acParDev = "", char cNewChar=NULL) const;
+		const char *acParSufx = "", const char *acParDev = "", const char cNewChar=NULL) const;
 
 	void SaveBinary(const char *acFileName) const;
 	void LoadBinary(const char *acFileName);
