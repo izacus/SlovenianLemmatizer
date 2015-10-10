@@ -33,8 +33,6 @@ class Lemmatizer(object):
         """
 
         this_dir = os.path.dirname(os.path.realpath(__file__))
-        print "This dir:", this_dir
-
         if library_path is None:
             self._lib = cdll.LoadLibrary(os.path.join(this_dir, "libLemmagen.so"))
         else:
@@ -52,7 +50,10 @@ class Lemmatizer(object):
         self._output_buffer = create_string_buffer(self._output_buffer_len)
 
     def lemmatize(self, word):
-        if (self._output_buffer_len < 2 * len(word)):
+        if word is None:
+            return None
+
+        if self._output_buffer_len < 2 * len(word):
             self._output_buffer_len = 2 * len(word)
             self._output_buffer = create_string_buffer(self._output_buffer_len)
         
