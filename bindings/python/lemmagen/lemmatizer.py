@@ -72,7 +72,7 @@ class Lemmatizer(object):
             return self._lemmatize_py2(word)
 
     def _lemmatize_py3(self, word):
-        word_b = bytes(word + "\0", 'UTF-8')
+        word_b = bytes(word, 'UTF-8')
         self._lib.lem_lemmatize_word(word_b, self._output_buffer)
         return str(self._output_buffer.value, 'UTF-8')
 
