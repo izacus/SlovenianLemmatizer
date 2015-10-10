@@ -2,7 +2,7 @@ from setuptools import setup, Extension
 
 lib = Extension('lemmagen.libLemmagen',
                 ["src/sl_lemmatizer.cpp", "src/RdrLemmatizer.cpp"],
-                extra_compile_args=["-O3"])
+                extra_compile_args=["-O3", "-fno-strict-aliasing"])
 
 setup(name="Lemmagen",
       version="1.0.3",

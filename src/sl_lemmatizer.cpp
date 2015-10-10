@@ -33,11 +33,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 RdrLemmatizer *lemmatizer = NULL;
 
 int lem_load_language_library(char *file_name) {
-
 	struct stat buf;
 	// Check if file exists first
 	if (stat(file_name, &buf) != 0) {
+	    std::cerr << "[ERROR] Language file " << std::string(file_name) << " could not be found!" << std::endl;
 		return STATUS_FILE_NOT_FOUND;
+	}
+
+	if (!(buf.st_mode & S_IFREG)) {
+	    std::cerr << "[ERROR] Language file " << std::string(file_name) << " is not a file!" << std::endl;
+	    return STATUS_FILE_NOT_FOUND;
 	}
 
 	if (lemmatizer != NULL) {
