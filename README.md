@@ -1,5 +1,6 @@
 LemmaGen Slovene Lemmatizer module
 ===========================================
+[![Build Status](https://travis-ci.org/izacus/SlovenianLemmatizer.svg?branch=master)](https://travis-ci.org/izacus/SlovenianLemmatizer)
 
 This is a lemmatizer for slovene language.
 
