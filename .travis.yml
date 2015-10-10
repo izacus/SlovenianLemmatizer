@@ -5,6 +5,7 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
+  - "3.5"
 
 before_script: cd bindings/python
 script: python setup.py test
