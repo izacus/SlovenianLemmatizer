@@ -1,4 +1,4 @@
-from distutils.core import setup,Extension
+from setuptools import setup, Extension
 
 lib = Extension('lemmagen.libLemmagen',
                 ["src/sl_lemmatizer.cpp", "src/RdrLemmatizer.cpp"],
@@ -21,4 +21,5 @@ setup(name="Lemmagen",
         "Topic :: Text Processing :: Linguistic",
       ],
       ext_modules=[lib],
+      test_suite="tests",
       packages=["lemmagen"])

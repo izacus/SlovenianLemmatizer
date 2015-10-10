@@ -5,5 +5,15 @@ bindings/python/src/sl_lemmatizer.cpp
 bindings/python/src/sl_lemmatizer.h
 bindings/python/src/RdrLemmatizer.cpp
 bindings/python/src/RdrLemmatizer.h
+
+# IDEA
 .idea
 target
+
+# Python
+*.pyc
+bindings/python/build
+bindings/python/dist
+bindings/python/MANIFEST.in
+bindings/python/Lemmagen.egg-info
+bindings/python/lemmagen/libLemmagen*

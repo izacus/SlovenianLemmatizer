@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 from ctypes import cdll, create_string_buffer
 import os
 import lemmagen
+import sysconfig
+
 
 class Lemmatizer(object):
     STATUS_OK = 0
@@ -34,7 +36,7 @@ class Lemmatizer(object):
 
         this_dir = os.path.dirname(os.path.realpath(__file__))
         if library_path is None:
-            self._lib = cdll.LoadLibrary(os.path.join(this_dir, "libLemmagen.so"))
+            self._lib = cdll.LoadLibrary(os.path.join(this_dir, "libLemmagen%s" % self._get_library_extension()))
         else:
             self._lib = cdll.LoadLibrary(library_path)
 
@@ -64,3 +66,9 @@ class Lemmatizer(object):
         self._lib.lem_lemmatize_word(word, self._output_buffer)
         return self._output_buffer.value.decode('utf-8') if is_unicode else self._output_buffer.value
 
+    @staticmethod
+    def _get_library_extension():
+        extension = sysconfig.get_config_var("EXT_SUFFIX")
+        if extension is None:   # EXT_SUFFIX is only available in new Pythons
+            extension = sysconfig.get_config_var("SO")
+        return extension
