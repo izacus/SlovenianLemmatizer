@@ -15,5 +15,10 @@ target
 bindings/python/build
 bindings/python/dist
 bindings/python/MANIFEST.in
-bindings/python/Lemmagen.egg-info
+Lemmagen.egg-info
 bindings/python/lemmagen/libLemmagen*
+
+# C
+*.o
+bin/
+
