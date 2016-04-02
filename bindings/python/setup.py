@@ -1,11 +1,11 @@
 from setuptools import setup, Extension
 
 lib = Extension('lemmagen.libLemmagen',
-                ["src/sl_lemmatizer.cpp", "src/RdrLemmatizer.cpp"],
+                ["src/sl_lemmatizer.cpp", "src/RdrLemmatizer.cpp", "win_init.cpp"],
                 extra_compile_args=["-O3"])
 
 setup(name="Lemmagen",
-      version="1.1.1",
+      version="1.2.0",
       description="LemmaGen lemmatizer for Python supporing Slovene, Serbian, Romanian, Estonian, Bulgarian and other languages",
       package_data={'lemmagen': ["dictionaries/*"]},
       license="GPLv2+",
