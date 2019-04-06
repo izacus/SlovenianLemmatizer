@@ -95,23 +95,22 @@ static uint64_t abDataStatic[] = DATA_TBL;
 			iAddr += iSize
 
 //-------------------------------------------------------------------------------------------
-using namespace std;
 
 class RdrLemmatizer{
 public:
 	uint8_t *abData;
-	int iDataLen;
+	uint32_t iDataLen;
 
 public:
-	RdrLemmatizer(uint8_t *abData, int iDataLen);
+	RdrLemmatizer(uint8_t *abData, uint32_t iDataLen);
 	RdrLemmatizer(const char *acFileName);
 	RdrLemmatizer();
 	~RdrLemmatizer();
 
-	int SizeOfTree() const;
+	uint32_t SizeOfTree() const;
 
-	char *Lemmatize(const char *acWord, char *acOutBuffer = NULL) const;
+	char *Lemmatize(const char *acWord, char *acOutBuffer = nullptr) const;
 
 	void LoadBinary(const char *acFileName);
-	void LoadBinary(istream &is);
+	void LoadBinary(std::istream &is);
 };

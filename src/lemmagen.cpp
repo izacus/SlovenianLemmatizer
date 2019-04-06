@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../include/lemmagen.h"
 #include "RdrLemmatizer.h"
 
-RdrLemmatizer *lemmatizer = nullptr;
+static RdrLemmatizer *lemmatizer = nullptr;
 
 #ifdef __cplusplus
 extern "C"

@@ -12,8 +12,10 @@ file(GLOB lemmagen_src_files ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 set(LINUX_LINKER_FLAGS "-Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,--gc-sections")
 set(MACOS_LINKER_FLAGS "-Wl,-dead_strip")
 
+set(WARNINGS -Wall -Weverything -Wno-c++98-compat -Wno-old-style-cast -Wno-c++98-compat-pedantic -Wno-cast-align -Wno-padded)
+
 add_library(lemmagen SHARED ${lemmagen_src_files})
-target_compile_options(lemmagen PRIVATE -Wall -Weverything -O3 -ffunction-sections -fdata-sections -fstack-protector -fvisibility-inlines-hidden -static)
+target_compile_options(lemmagen PRIVATE ${WARNINGS} -O3 -ffunction-sections -fdata-sections -fstack-protector -fvisibility-inlines-hidden -static)
 target_compile_definitions(lemmagen PRIVATE _FORTIFY_SOURCE=2)
 target_include_directories(lemmagen INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 set_target_properties(lemmagen PROPERTIES

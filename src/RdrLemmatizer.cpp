@@ -26,10 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 //-------------------------------------------------------------------------------------------
 //constructors
-RdrLemmatizer::RdrLemmatizer(uint8_t* abData, int iDataLen)
+RdrLemmatizer::RdrLemmatizer(uint8_t* data, uint32_t dataLen)
 {
-	this->abData = abData;
-	this->iDataLen = iDataLen;
+	this->abData = data;
+	this->iDataLen = dataLen;
 }
 
 RdrLemmatizer::RdrLemmatizer(const char *acFileName)
@@ -53,7 +53,7 @@ RdrLemmatizer::~RdrLemmatizer()
 
 //-------------------------------------------------------------------------------------------
 //returns size of a tree (number of bytes)
-int RdrLemmatizer::SizeOfTree() const
+uint32_t RdrLemmatizer::SizeOfTree() const
 {
 	return iDataLen - DataStart;
 }
@@ -62,12 +62,13 @@ int RdrLemmatizer::SizeOfTree() const
 //lematizes word according to this data
 char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 {
-	uint8_t bWordLen = strlen(acWord);
-
+	// Original code only assumes lengths up to 256, truncate forcefully if buffers aren't correct.
+	const auto len = strlen(acWord);
+	uint8_t bWordLen = len > 250 ? 250 : (uint8_t)len;
 	uint32_t iAddr = DataStart;
 	uint32_t iParentAddr = DataStart;
 	uint32_t iTmpAddr;
-	char bLookChar = bWordLen;
+	int16_t bLookChar = bWordLen;
 	uint8_t bType = abData[iAddr];
 
 	while (true)
@@ -133,7 +134,7 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 		if ((bType & BitInternal) == BitInternal)
 		{
 			const uint8_t bMod = abData[iTmpAddr];
-			const uint8_t bChar = acWord[bLookChar];
+			const uint8_t bChar = (uint8_t)acWord[bLookChar];
 
 			iTmpAddr += ModLen + (bChar % bMod) * (AddrLen + CharLen);
 
@@ -180,7 +181,7 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 
 //-------------------------------------------------------------------------------------------
 //loads all data needed from binary file
-void RdrLemmatizer::LoadBinary(istream &is)
+void RdrLemmatizer::LoadBinary(std::istream &is)
 {
 	iDataLen = 0;
 	is.read((char *)&iDataLen, 4);
@@ -191,7 +192,7 @@ void RdrLemmatizer::LoadBinary(istream &is)
 //loads all data needed from binary file
 void RdrLemmatizer::LoadBinary(const char *acFileName)
 {
-	ifstream ifs(acFileName, ios_base::in | ios_base::binary);
+	std::ifstream ifs(acFileName, std::ios_base::in | std::ios_base::binary);
 	LoadBinary(ifs);
 	ifs.close();
 }
