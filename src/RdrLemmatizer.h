@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <cstdint>
+
 #include "string.h"
 
 #ifndef AllInOneFile
@@ -39,13 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 	#define DATA_LEN 8
 	#define DATA_TBL {0x0000000000000000}
 #endif
-
-//-------------------------------------------------------------------------------------------
-//typedefs
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef unsigned int dword;
-typedef unsigned long long qword;
 
 //-------------------------------------------------------------------------------------------
 //const variables that algorithm depends on
@@ -71,18 +66,18 @@ typedef unsigned long long qword;
 #define TypeIntrAC		(BitDefault | BitAddChar | BitInternal)
 
 //-------------------------------------------------------------------------------------------
-//main data structure and it's length 
-static dword iDataLenStatic = DATA_LEN;
-static qword abDataStatic[] = DATA_TBL;
+//main data structure and it's length
+static uint32_t iDataLenStatic = DATA_LEN;
+static uint64_t abDataStatic[] = DATA_TBL;
 
 //-------------------------------------------------------------------------------------------
 //helper macros for nicer code and faster execution
 #if AddrLen == 3
 	#define GETDWORD(type, wVar, wAddr) \
-				type wVar = *((dword*) &abData[wAddr]) & 0x00FFFFF
+				type wVar = *((uint32_t*) &abData[wAddr]) & 0x00FFFFF
 #else
 	#define GETDWORD(type, wVar, wAddr) \
-				type wVar = *((dword *) &abData[wAddr]) 
+				type wVar = *((uint32_t *) &abData[wAddr])
 #endif
 
 #define GETBYTEMOVE(type, bByte, iSize) \
@@ -104,11 +99,11 @@ using namespace std;
 
 class RdrLemmatizer{
 public:
-	byte *abData;
+	uint8_t *abData;
 	int iDataLen;
 
 public:
-	RdrLemmatizer(byte *abData, int iDataLen);
+	RdrLemmatizer(uint8_t *abData, int iDataLen);
 	RdrLemmatizer(const char *acFileName);
 	RdrLemmatizer();
 	~RdrLemmatizer();
@@ -117,12 +112,6 @@ public:
 
 	char *Lemmatize(const char *acWord, char *acOutBuffer = NULL) const;
 
-	void ToStringHex(ostream &os) const;
-	void ToString(ostream &os = cout, dword iStartAddr = DataStart, int iDepth = 0, 
-		const char *acParSufx = "", const char *acParDev = "", const char cNewChar=NULL) const;
-
-	void SaveBinary(const char *acFileName) const;
 	void LoadBinary(const char *acFileName);
-	void SaveBinary(ostream &os) const;
 	void LoadBinary(istream &is);
 };
