@@ -21,13 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
 import sys
-
-import lemmagen
-import libLemmagen
 import sysconfig
 
-IS_PYTHON3 = sys.version_info > (3, )
+import lemmagen
+from lemmagen import libLemmagen
 
+IS_PYTHON3 = sys.version_info > (3, )
 
 class Lemmatizer(object):
 

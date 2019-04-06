@@ -2,13 +2,26 @@ from setuptools import setup, Extension
 from Cython.Build import cythonize
 
 import os
+import platform
+
 root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 src_dir = os.path.join(root_dir, "src")
 include_dir = os.path.join(root_dir, "include")
 
+# Setup compilation arguments for native code
+compile_args = []
+link_args = []
+if os.name == 'posix':
+  compile_args = ["-O3", "-ffunction-sections", "-fdata-sections", "-fvisibility-inlines-hidden"]
+  if platform.system() == 'Darwin':
+    link_args = ["-Wl,-dead_strip"]
+  else:
+    link_args = ["-Wl,-z,noexecstack", "-Wl,-z,now", "-Wl,-z,relro", "-Wl,--gc-sections"]
+
 lib = Extension('lemmagen.libLemmagen',
                 ["lemmagen/libLemmagen.pyx", os.path.join(src_dir, "lemmagen.cpp"), os.path.join(src_dir, "RdrLemmatizer.cpp")],
-                extra_compile_args=["-O3"],
+                extra_compile_args=compile_args,
+                extra_link_args=link_args,
                 include_dirs=[include_dir])
 
 setup(name="Lemmagen",
