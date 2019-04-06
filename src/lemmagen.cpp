@@ -28,14 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../include/lemmagen.h"
 #include "RdrLemmatizer.h"
 
-RdrLemmatizer *lemmatizer = NULL;
+RdrLemmatizer *lemmatizer = nullptr;
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-	EXPORT_API int lem_load_language_library(char *file_name)
+	EXPORT_API int lem_load_language_library(const char *file_name)
 	{
 		struct stat buf;
 		// Check if file exists first
@@ -51,7 +51,7 @@ extern "C"
 			return STATUS_FILE_NOT_FOUND;
 		}
 
-		if (lemmatizer != NULL)
+		if (lemmatizer != nullptr)
 		{
 			delete lemmatizer;
 		}
@@ -60,26 +60,42 @@ extern "C"
 		return STATUS_OK;
 	}
 
-	EXPORT_API void lem_lemmatize_word(char *input_word, char *output_word)
+	EXPORT_API void lem_lemmatize_word(const char *input_word, char *output_word)
 	{
-		if (lemmatizer == NULL)
+		if (lemmatizer == nullptr)
 		{
 			std::cerr << "[ERROR] Language file for lemmatizer has to be loaded first!" << std::endl;
+			return;
+		}
+
+		if (output_word == nullptr) {
+			std::cerr << "[ERROR] Output buffer is NULL!" << std::endl;
+			return;
+		}
+
+		if (input_word == nullptr) {
+			output_word[0] = '\0';
 			return;
 		}
 
 		lemmatizer->Lemmatize(input_word, output_word);
 	}
 
-	EXPORT_API char *lem_lemmatize_word_alloc(char *input_word)
+	EXPORT_API char *lem_lemmatize_word_alloc(const char *input_word)
 	{
-		if (lemmatizer == NULL)
+		if (lemmatizer == nullptr)
 		{
 			std::cerr << "[ERROR] Language file for lemmatizer has to be loaded first!" << std::endl;
-			return NULL;
+			return nullptr;
 		}
 
-		char *output_word = lemmatizer->Lemmatize(input_word, NULL);
+		if (input_word == nullptr) {
+			char *return_val = (char *)malloc(sizeof(char));
+			return_val[0] = '\0';
+			return return_val;
+		}
+
+		char *output_word = lemmatizer->Lemmatize(input_word, nullptr);
 		// Output word is allocated with "new" so we have to reallocate to change to
 		// C-like malloc allocation
 		char *return_val = (char *)malloc(sizeof(char) * strlen(output_word) + 1);

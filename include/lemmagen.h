@@ -49,7 +49,7 @@ extern "C"
    * @param file_name Path to the RDR tree binary file
    * @return returns STATUS_OK if the file was loaded, STATUS_FILE_NOT_FOUND otherwise
    */
-  EXPORT_API int lem_load_language_library(char *file_name);
+  EXPORT_API int lem_load_language_library(const char *file_name);
 
   /**
    * @brief Lemmatizes a single word
@@ -57,7 +57,7 @@ extern "C"
    * @param input_word Word to lemmatize, null-terminated string
    * @param output_word Buffer in which the output word will be passed
    */
-  EXPORT_API void lem_lemmatize_word(char *input_word, char *output_word);
+  EXPORT_API void lem_lemmatize_word(const char *input_word, char *output_word);
 
   /**
    * @brief Lemmatizes a single word
@@ -67,7 +67,7 @@ extern "C"
    * @param input_word Word to lemmatize, null-terminated string
    * @return returns word in newly-allocated string which has to be manually freed
    */
-  EXPORT_API char *lem_lemmatize_word_alloc(char *input_word);
+  EXPORT_API char *lem_lemmatize_word_alloc(const char *input_word);
 
 #ifdef __cplusplus
 }
