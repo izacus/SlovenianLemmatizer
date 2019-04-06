@@ -69,6 +69,11 @@ extern "C"
    */
   EXPORT_API char *lem_lemmatize_word_alloc(const char *input_word);
 
+ /**
+  * @brief Unloads the library.
+  */
+  EXPORT_API void lem_unload_language_library();
+
 #ifdef __cplusplus
 }
 #endif

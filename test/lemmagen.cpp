@@ -1,15 +1,21 @@
 #include "gtest/gtest.h"
 #include "lemmagen.h"
 
+#ifndef DATA_PATH
+    #define DATA_PATH "../data"
+#endif
+
 class LemmagenTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    lem_load_language_library("../data/lem-me-sl.bin");
+    lem_load_language_library(DATA_PATH "/lem-me-sl.bin");
   }
 
   char output_array[256];
 
-  // void TearDown() override {}
+  void TearDown() override {
+    lem_unload_language_library();
+  }
 };
 
 TEST_F(LemmagenTest, TestHodimoWord) {

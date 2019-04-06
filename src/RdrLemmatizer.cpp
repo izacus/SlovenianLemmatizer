@@ -134,7 +134,7 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 		if ((bType & BitInternal) == BitInternal)
 		{
 			const uint8_t bMod = abData[iTmpAddr];
-			const uint8_t bChar = (uint8_t)acWord[bLookChar];
+			const uint8_t bChar = (uint8_t) acWord[bLookChar];
 
 			iTmpAddr += ModLen + (bChar % bMod) * (AddrLen + CharLen);
 

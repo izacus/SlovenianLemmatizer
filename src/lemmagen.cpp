@@ -25,10 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <mutex>
 #include "../include/lemmagen.h"
 #include "RdrLemmatizer.h"
 
 static RdrLemmatizer *lemmatizer = nullptr;
+static std::mutex mutex_lemmatizer;
 
 #ifdef __cplusplus
 extern "C"
@@ -37,6 +39,7 @@ extern "C"
 
 	EXPORT_API int lem_load_language_library(const char *file_name)
 	{
+		std::lock_guard<std::mutex> lock(mutex_lemmatizer);
 		struct stat buf;
 		// Check if file exists first
 		if (stat(file_name, &buf) != 0)
@@ -62,6 +65,8 @@ extern "C"
 
 	EXPORT_API void lem_lemmatize_word(const char *input_word, char *output_word)
 	{
+		// TODO figure out fast locking for this to ensure thread safety
+		// Lemmatization should be reentrant, but initialization isn't.
 		if (lemmatizer == nullptr)
 		{
 			std::cerr << "[ERROR] Language file for lemmatizer has to be loaded first!" << std::endl;
@@ -103,6 +108,14 @@ extern "C"
 		delete[] output_word;
 
 		return return_val;
+	}
+
+	EXPORT_API void lem_unload_language_library() {
+		std::lock_guard<std::mutex> lock(mutex_lemmatizer);
+		if (lemmatizer != nullptr) {
+			delete lemmatizer;
+			lemmatizer = nullptr;
+		}
 	}
 
 #ifdef __cplusplus
