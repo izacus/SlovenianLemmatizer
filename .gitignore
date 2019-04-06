@@ -22,3 +22,9 @@ bindings/python/lemmagen/libLemmagen*
 *.o
 bin/
 
+# CMake
+build/
+
+# VSCode
+.vscode/
+
