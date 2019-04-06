@@ -1,8 +1,10 @@
 from setuptools import setup, Extension
+from Cython.Build import cythonize
 
 lib = Extension('lemmagen.libLemmagen',
-                ["src/sl_lemmatizer.cpp", "src/RdrLemmatizer.cpp", "win_init.cpp"],
-                extra_compile_args=["-O3"])
+                ["lemmagen/libLemmagen.pyx", "../../src/lemmagen.cpp", "../../src/RdrLemmatizer.cpp"],
+                extra_compile_args=["-O3"],
+                include_dirs=["../../include"])
 
 setup(name="Lemmagen",
       version="1.2.0",
@@ -22,6 +24,6 @@ setup(name="Lemmagen",
         "Programming Language :: Python :: 3",
         "Topic :: Text Processing :: Linguistic",
       ],
-      ext_modules=[lib],
+      ext_modules=cythonize([lib]),
       test_suite="tests",
       packages=["lemmagen"])
