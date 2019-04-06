@@ -72,7 +72,7 @@ extern "C"
  /**
   * @brief Unloads the library.
   */
-  EXPORT_API void lem_unload_language_library();
+  EXPORT_API void lem_unload_language_library(void);
 
 #ifdef __cplusplus
 }

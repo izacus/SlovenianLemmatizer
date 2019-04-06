@@ -110,7 +110,7 @@ extern "C"
 		return return_val;
 	}
 
-	EXPORT_API void lem_unload_language_library() {
+	EXPORT_API void lem_unload_language_library(void) {
 		std::lock_guard<std::mutex> lock(mutex_lemmatizer);
 		if (lemmatizer != nullptr) {
 			delete lemmatizer;

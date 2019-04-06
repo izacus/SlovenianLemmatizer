@@ -8,8 +8,8 @@ cdef extern from "lemmagen.h":
 cdef class Lemmagen:
     cdef char* output_buffer;
 
-    DEF STATUS_OK = 0
-    DEF STATUS_FILE_NOT_FOUND = -1
+    STATUS_OK = 0
+    STATUS_FILE_NOT_FOUND = -1
 
     def __init__(self, language_library_path):
         self.output_buffer = <char*> malloc(256 * sizeof(char))

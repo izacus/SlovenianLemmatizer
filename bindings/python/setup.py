@@ -1,15 +1,20 @@
 from setuptools import setup, Extension
 from Cython.Build import cythonize
 
+import os
+root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+src_dir = os.path.join(root_dir, "src")
+include_dir = os.path.join(root_dir, "include")
+
 lib = Extension('lemmagen.libLemmagen',
-                ["lemmagen/libLemmagen.pyx", "../../src/lemmagen.cpp", "../../src/RdrLemmatizer.cpp"],
+                ["lemmagen/libLemmagen.pyx", os.path.join(src_dir, "lemmagen.cpp"), os.path.join(src_dir, "RdrLemmatizer.cpp")],
                 extra_compile_args=["-O3"],
-                include_dirs=["../../include"])
+                include_dirs=[include_dir])
 
 setup(name="Lemmagen",
-      version="1.2.0",
+      version="1.3.0",
       description="LemmaGen lemmatizer for Python supporing Slovene, Serbian, Romanian, Estonian, Bulgarian and other languages",
-      package_data={'lemmagen': ["dictionaries/*"]},
+      package_data={'lemmagen': [os.path.join(root_dir, "dictionaries/*")]},
       license="GPLv2+",
       author="Jernej Virag",
       author_email="jernej@virag.si",
