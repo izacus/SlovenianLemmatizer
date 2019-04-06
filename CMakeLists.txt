@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(LemmaGen VERSION 1.4
                  DESCRIPTION "LemmaGen lemmatizer"
                  LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 11)
 
 # ========================
 # SHARED LIBRARY
@@ -12,7 +13,7 @@ set(LINUX_LINKER_FLAGS "-Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,--gc-sect
 set(MACOS_LINKER_FLAGS "-Wl,-dead_strip")
 
 add_library(lemmagen SHARED ${lemmagen_src_files})
-target_compile_options(lemmagen PRIVATE -O3 -ffunction-sections -fdata-sections -fstack-protector -fvisibility-inlines-hidden -static)
+target_compile_options(lemmagen PRIVATE -Wall -Weverything -O3 -ffunction-sections -fdata-sections -fstack-protector -fvisibility-inlines-hidden -static)
 target_compile_definitions(lemmagen PRIVATE _FORTIFY_SOURCE=2)
 target_include_directories(lemmagen INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 set_target_properties(lemmagen PROPERTIES
