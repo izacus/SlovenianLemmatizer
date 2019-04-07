@@ -12,7 +12,7 @@ include_dir = os.path.join(root_dir, "include")
 compile_args = []
 link_args = []
 if os.name == 'posix':
-  compile_args = ["-O3", "-ffunction-sections", "-fdata-sections", "-fvisibility-inlines-hidden"]
+  compile_args = ["-O3", "-ffunction-sections", "-fdata-sections", "-fvisibility-inlines-hidden", "-std=c++11"]
   if platform.system() == 'Darwin':
     link_args = ["-Wl,-dead_strip"]
   else:
