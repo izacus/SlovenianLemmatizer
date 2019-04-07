@@ -16,8 +16,6 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ******************************************************************************/
-#include <stdint.h>
-
 #include "RdrLemmatizer.h"
 
 #ifdef WIN32
@@ -56,7 +54,7 @@ uint32_t RdrLemmatizer::SizeOfTree() const
 char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 {
 	// Original code only assumes lengths up to 256, truncate forcefully if buffers aren't correct.
-	const auto len = strlen(acWord);
+	const size_t len = strlen(acWord);
 	uint8_t bWordLen = len > 250 ? 250 : (uint8_t)len;
 	uint32_t iAddr = DataStart;
 	uint32_t iParentAddr = DataStart;
@@ -71,7 +69,7 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 		//check if additional characters match
 		if ((bType & BitAddChar) == BitAddChar)
 		{
-			auto bNewSufxLen = abData[iTmpAddr];
+			uint8_t bNewSufxLen = abData[iTmpAddr];
 			iTmpAddr += LenSpecLen;
 
 			bLookChar -= bNewSufxLen;
@@ -108,7 +106,7 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 			{
 				//go to the hashtable position 0(NULL) and look idf address is not NULL
 				iTmpAddr += ModLen;
-				const auto bChar = abData[iTmpAddr];
+				const uint8_t bChar = abData[iTmpAddr];
 				GETDWORD(, iTmpAddr, iTmpAddr + CharLen);
 				if (bChar == 0 && iTmpAddr != 0)
 				{

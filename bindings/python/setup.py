@@ -18,7 +18,7 @@ if os.name == 'posix':
   else:
     link_args = ["-Wl,-z,noexecstack", "-Wl,-z,now", "-Wl,-z,relro", "-Wl,--gc-sections"]
 elif os.name == 'nt':
-  compile_args = ["/Ox"]
+  compile_args = ["/Ox", "/EHsc"]
   link_args = []
 
 lib = Extension('lemmagen.libLemmagen',

@@ -25,12 +25,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <mutex>
 #include "../include/lemmagen.h"
 #include "RdrLemmatizer.h"
 
+#define HAS_MUTEX __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
+
+// MSVC before 14 doesn't really handle C++11
+#if HAS_MUTEX
+	#include <mutex>
+	static std::mutex mutex_lemmatizer;
+#endif
+
 static RdrLemmatizer *lemmatizer = nullptr;
-static std::mutex mutex_lemmatizer;
+
 
 #ifdef __cplusplus
 extern "C"
@@ -39,7 +46,10 @@ extern "C"
 
 	EXPORT_API int lem_load_language_library(const char *file_name)
 	{
+		#if HAS_MUTEX
 		std::lock_guard<std::mutex> lock(mutex_lemmatizer);
+		#endif
+
 		struct stat buf;
 		// Check if file exists first
 		if (stat(file_name, &buf) != 0)
@@ -116,7 +126,10 @@ extern "C"
 	}
 
 	EXPORT_API void lem_unload_language_library(void) {
+		#if HAS_MUTEX
 		std::lock_guard<std::mutex> lock(mutex_lemmatizer);
+		#endif
+
 		if (lemmatizer != nullptr) {
 			delete lemmatizer;
 			lemmatizer = nullptr;
