@@ -17,6 +17,9 @@ if os.name == 'posix':
     link_args = ["-Wl,-dead_strip"]
   else:
     link_args = ["-Wl,-z,noexecstack", "-Wl,-z,now", "-Wl,-z,relro", "-Wl,--gc-sections"]
+elif os.name == 'nt':
+  compile_args = ["/Ox"]
+  link_args = []
 
 lib = Extension('lemmagen.libLemmagen',
                 ["lemmagen/libLemmagen.pyx", os.path.join(src_dir, "lemmagen.cpp"), os.path.join(src_dir, "RdrLemmatizer.cpp")],
@@ -27,7 +30,7 @@ lib = Extension('lemmagen.libLemmagen',
 setup(name="Lemmagen",
       version="1.3.0",
       description="LemmaGen lemmatizer for Python supporing Slovene, Serbian, Romanian, Estonian, Bulgarian and other languages",
-      package_data={'lemmagen': [os.path.join(root_dir, "dictionaries/*")]},
+      package_data={'lemmagen':["dictionaries/*"]},
       license="GPLv2+",
       author="Jernej Virag",
       author_email="jernej@virag.si",

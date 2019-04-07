@@ -59,7 +59,12 @@ extern "C"
 			delete lemmatizer;
 		}
 
-		lemmatizer = new RdrLemmatizer(file_name);
+		try {
+			lemmatizer = new RdrLemmatizer(file_name);
+		} catch (std::ifstream::failure e) {
+			return STATUS_FILE_NOT_FOUND;
+		}
+
 		return STATUS_OK;
 	}
 

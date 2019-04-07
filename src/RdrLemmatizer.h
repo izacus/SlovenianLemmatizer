@@ -30,18 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "string.h"
 
-#ifndef AllInOneFile
-	#include "RdrLemmData.h"
-#endif
-
-//-------------------------------------------------------------------------------------------
-//if data is not loaded from separate file define empty structure
-#ifndef RrdLemmData
-	#define RrdLemmData
-	#define DATA_LEN 8
-	#define DATA_TBL {0x0000000000000000}
-#endif
-
 //-------------------------------------------------------------------------------------------
 //const variables that algorithm depends on
 #define AddrLen 4
@@ -66,19 +54,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define TypeIntrAC		(BitDefault | BitAddChar | BitInternal)
 
 //-------------------------------------------------------------------------------------------
-//main data structure and it's length
-static uint32_t iDataLenStatic = DATA_LEN;
-static uint64_t abDataStatic[] = DATA_TBL;
-
-//-------------------------------------------------------------------------------------------
-//helper macros for nicer code and faster execution
-#if AddrLen == 3
-	#define GETDWORD(type, wVar, wAddr) \
-				type wVar = *((uint32_t*) &abData[wAddr]) & 0x00FFFFF
-#else
-	#define GETDWORD(type, wVar, wAddr) \
-				type wVar = *((uint32_t *) &abData[wAddr])
-#endif
+#define GETDWORD(type, wVar, wAddr) \
+			type wVar = *((uint32_t *) &abData[wAddr])
 
 #define GETBYTEMOVE(type, bByte, iSize) \
 			type bByte = abData[iAddr]; \
@@ -98,19 +75,14 @@ static uint64_t abDataStatic[] = DATA_TBL;
 
 class RdrLemmatizer{
 public:
-	uint8_t *abData;
-	uint32_t iDataLen;
+	uint8_t* abData;
+	int32_t iDataLen;
 
-public:
-	RdrLemmatizer(uint8_t *abData, uint32_t iDataLen);
-	RdrLemmatizer(const char *acFileName);
-	RdrLemmatizer();
+public:	
+	RdrLemmatizer(const char *acFileName);	
 	~RdrLemmatizer();
 
 	uint32_t SizeOfTree() const;
 
 	char *Lemmatize(const char *acWord, char *acOutBuffer = nullptr) const;
-
-	void LoadBinary(const char *acFileName);
-	void LoadBinary(std::istream &is);
 };

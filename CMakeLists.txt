@@ -12,7 +12,9 @@ file(GLOB lemmagen_src_files ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 set(LINUX_LINKER_FLAGS "-Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,--gc-sections")
 set(MACOS_LINKER_FLAGS "-Wl,-dead_strip")
 
-set(WARNINGS -Wall -Weverything -Wno-c++98-compat -Wno-old-style-cast -Wno-c++98-compat-pedantic -Wno-cast-align -Wno-padded)
+if (UNIX)
+  set(WARNINGS -Wall -Weverything -Wno-c++98-compat -Wno-old-style-cast -Wno-c++98-compat-pedantic -Wno-cast-align -Wno-padded)
+endif(UNIX)
 
 add_library(lemmagen SHARED ${lemmagen_src_files})
 target_compile_options(lemmagen PUBLIC ${WARNINGS} -ffunction-sections -fdata-sections -fstack-protector -fvisibility-inlines-hidden -static)
@@ -39,6 +41,11 @@ endif(APPLE)
 # ========================
 include(FetchContent)
 include(GoogleTest)
+
+if (WIN32)
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+endif(WIN32)
+
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git

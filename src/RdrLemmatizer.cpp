@@ -26,29 +26,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 //-------------------------------------------------------------------------------------------
 //constructors
-RdrLemmatizer::RdrLemmatizer(uint8_t* data, uint32_t dataLen)
+RdrLemmatizer::RdrLemmatizer(const char *acFileName) : abData(nullptr), iDataLen(0)
 {
-	this->abData = data;
-	this->iDataLen = dataLen;
-}
-
-RdrLemmatizer::RdrLemmatizer(const char *acFileName)
-{
-	LoadBinary(acFileName);
-}
-
-RdrLemmatizer::RdrLemmatizer()
-{
-	this->abData = (uint8_t *)abDataStatic;
-	this->iDataLen = iDataLenStatic;
+	std::ifstream is(acFileName, std::ios_base::in | std::ios_base::binary);
+	is.exceptions(std::ifstream::badbit | std::ifstream::failbit | std::ifstream::eofbit);
+	
+	is.read(reinterpret_cast<char *>(&iDataLen), sizeof(iDataLen));
+	abData = new uint8_t[iDataLen];
+	is.read(reinterpret_cast<char *>(abData), iDataLen);
+	is.close();
 }
 
 //-------------------------------------------------------------------------------------------
 //destructor
 RdrLemmatizer::~RdrLemmatizer()
-{
-	if (this->abData != (uint8_t *)abDataStatic)
-		delete[] abData;
+{	
+	delete[] abData;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -177,22 +170,4 @@ char *RdrLemmatizer::Lemmatize(const char *acWord, char *acOutBuffer) const
 	acReturn[iStemLen + iToLen] = 0;
 
 	return acReturn;
-}
-
-//-------------------------------------------------------------------------------------------
-//loads all data needed from binary file
-void RdrLemmatizer::LoadBinary(std::istream &is)
-{
-	iDataLen = 0;
-	is.read((char *)&iDataLen, 4);
-	abData = new uint8_t[iDataLen];
-	is.read((char *)abData, iDataLen);
-}
-//-------------------------------------------------------------------------------------------
-//loads all data needed from binary file
-void RdrLemmatizer::LoadBinary(const char *acFileName)
-{
-	std::ifstream ifs(acFileName, std::ios_base::in | std::ios_base::binary);
-	LoadBinary(ifs);
-	ifs.close();
 }

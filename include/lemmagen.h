@@ -39,6 +39,7 @@ extern "C"
 
 #define STATUS_OK 0
 #define STATUS_FILE_NOT_FOUND -1
+#define STATUS_FAILED -2
 
   /**
    * @brief Loads lemmatizer language binary file
