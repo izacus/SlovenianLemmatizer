@@ -26,7 +26,7 @@ lib = Extension('lemmagen.libLemmagen',
                 include_dirs=[include_dir])
 
 setup(name="Lemmagen",
-      version="1.3.0",
+      version="1.3.1",
       description="LemmaGen lemmatizer for Python supporing Slovene, Serbian, Romanian, Estonian, Bulgarian and other languages",
       package_data={'lemmagen':["dictionaries/*"]},
       license="GPLv2+",
