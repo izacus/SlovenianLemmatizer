@@ -1,1 +1,2 @@
-graft src
+include lemmagen/*.pyx
+include lemmagen/*.c

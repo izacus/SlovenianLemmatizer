@@ -1,6 +1,4 @@
 from setuptools import setup, Extension
-from Cython.Build import cythonize
-
 import os
 import platform
 
@@ -34,6 +32,7 @@ setup(name="Lemmagen",
       license="GPLv2+",
       author="Jernej Virag",
       author_email="jernej@virag.si",
+      setup_requires = ["setuptools>=18.0","cython>=0.28.4"],
       classifiers=[
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "Operating System :: OS Independent",
@@ -45,6 +44,6 @@ setup(name="Lemmagen",
         "Programming Language :: Python :: 3",
         "Topic :: Text Processing :: Linguistic",
       ],
-      ext_modules=cythonize([lib]),
+      ext_modules=[lib],
       test_suite="tests",
       packages=["lemmagen"])
