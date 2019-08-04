@@ -13,7 +13,10 @@ set(LINUX_LINKER_FLAGS "-Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,--gc-sect
 set(MACOS_LINKER_FLAGS "-Wl,-dead_strip")
 
 if (UNIX)
-  set(WARNINGS -Wall -Weverything -Wno-c++98-compat -Wno-old-style-cast -Wno-c++98-compat-pedantic -Wno-cast-align -Wno-padded)
+  set(WARNINGS -Wall -Wno-c++98-compat -Wno-old-style-cast -Wno-c++98-compat-pedantic -Wno-cast-align -Wno-padded)
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(WARNINGS -Weverything ${WARNINGS})
+  endif()
 endif(UNIX)
 
 add_library(lemmagen SHARED ${lemmagen_src_files})
