@@ -1,2 +1,0 @@
-include lemmagen/*.pyx
-include lemmagen/*.c
