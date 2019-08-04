@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(LemmaGen VERSION 1.3.0
+project(LemmaGen VERSION 1.3.2
                  DESCRIPTION "LemmaGen lemmatizer"
                  LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
