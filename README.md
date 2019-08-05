@@ -26,7 +26,7 @@ Calling "make" will build
 Contributors:
 ----------------
 
-Original version form Joseph Stephan Institute (http://lemmatise.ijs.si/)
+Original version from Jožef Stefan Institute (http://lemmatise.ijs.si/)
 
 * Jernej Virag
 * Domen Grabec
