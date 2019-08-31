@@ -12,7 +12,7 @@ jobs:
     - name: Run CMake
       working-directory: build
       env:
-        CXX: /usr/bin/gcc
+        CXX: /usr/bin/g++
         CC: /usr/bin/gcc
       run: cmake ..
     - name: Build
@@ -31,8 +31,8 @@ jobs:
     - name: Run CMake
       working-directory: build
       env:
-        CXX: /usr/bin/clang
-        CC: /usr/bin/clang++
+        CXX: /usr/bin/clang++
+        CC: /usr/bin/clang
       run: cmake ..
     - name: Build
       working-directory: build
