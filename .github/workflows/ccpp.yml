@@ -10,10 +10,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Create build directory
-      run: mkdir -p build && cd build
+      run: mkdir -p build
     - name: Run CMake
+      working-directory: build
       run: cmake ..
     - name: Build
+      working-directory: build
       run: make
     - name: Test
+      working-directory: build
       run: make test
