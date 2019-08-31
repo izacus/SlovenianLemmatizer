@@ -4,8 +4,7 @@ on: [push]
 
 jobs:
   build-on-gcc:
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v1
     - name: Create build directory
@@ -15,6 +14,25 @@ jobs:
       env:
         CXX: /usr/bin/gcc
         CC: /usr/bin/gcc
+      run: cmake ..
+    - name: Build
+      working-directory: build
+      run: make
+    - name: Test
+      working-directory: build
+      run: make test
+
+  build-on-clang:
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Create build directory
+      run: mkdir -p build
+    - name: Run CMake
+      working-directory: build
+      env:
+        CXX: /usr/bin/clang
+        CC: /usr/bin/clang++
       run: cmake ..
     - name: Build
       working-directory: build
