@@ -1,0 +1,19 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Create build directory
+      run: mkdir -p build && cd build
+    - name: Run CMake
+      run: cmake ..
+    - name: Build
+      run: make
+    - name: Test
+      run: make test
