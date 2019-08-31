@@ -3,8 +3,7 @@ name: C/C++ CI
 on: [push]
 
 jobs:
-  build:
-
+  build-on-gcc:
     runs-on: ubuntu-latest
     
     steps:
@@ -13,6 +12,9 @@ jobs:
       run: mkdir -p build
     - name: Run CMake
       working-directory: build
+      env:
+        CXX: /usr/bin/gcc
+        CC: /usr/bin/gcc
       run: cmake ..
     - name: Build
       working-directory: build
