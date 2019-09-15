@@ -22,6 +22,11 @@ Calling "make" will build
  * `libLemmatizer.so` - shared library for use with Java, Python and Solr.
  * `lemmatizer`         executable to lemmatize words from commandline
 
+Other language bindings
+---------------
+
+**Python**: [SloveneLemmatizer-Python](https://github.com/izacus/SlovenianLemmatizer-Python)
+
 
 Contributors:
 ----------------
