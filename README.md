@@ -25,7 +25,7 @@ Calling "make" will build
 Other language bindings
 ---------------
 
-**Python**: [SloveneLemmatizer-Python](https://github.com/izacus/SlovenianLemmatizer-Python)
+**Python**: [SlovenianLemmatizer-Python](https://github.com/izacus/SlovenianLemmatizer-Python)
 
 
 Contributors:
