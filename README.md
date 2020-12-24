@@ -4,23 +4,20 @@ LemmaGen Slovene Lemmatizer module
 
 This is a lemmatizer for slovene language.
 
-The file directory structure is as follows:
+The file directory structure:
 
 ```
-data/         - Binary language dictionary files required by the lemmatizer
-..about.txt   - Data file key
-
+data/         - Binary language dictionary files required by the lemmatizer (about.txt describes each filename)
 src/          - Lemmatizer C++ source
 
-Makefile      - Makefile to build lemmatizer .so file on Linux systems
+CMakeList.txt  - CMake build script to build the lemmatizer library
 ```
 
 Compilation
 ----------------
 
 Calling "make" will build
- * `libLemmatizer.so` - shared library for use with Java, Python and Solr.
- * `lemmatizer`         executable to lemmatize words from commandline
+ * `libLemmatizer.so` - shared library with exported symbols for other bindings
 
 Other language bindings
 ---------------
