@@ -71,7 +71,7 @@ extern "C"
 
 		try {
 			lemmatizer = new RdrLemmatizer(file_name);
-		} catch (std::ifstream::failure e) {
+		} catch (std::ifstream::failure& e) {
 			return STATUS_FILE_NOT_FOUND;
 		}
 
